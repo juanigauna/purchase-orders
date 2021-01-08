@@ -38,6 +38,12 @@ function dep_price($price, $dig) {
 }
 function get_domain($url){
     $protocols = array('http://', 'https://', 'ftp://');
-    $url = explode('/', str_replace($protocols, '', $url));
-    return $url[0];
+	$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+	$domain = explode('/', str_replace($protocols, '', $url));
+	$production = $domain[0] === 'localhost' ? false : true;
+    return [
+		"protocol" => $protocol,
+		"domain" => $domain[0],
+		"production" => $production
+	];
 }
