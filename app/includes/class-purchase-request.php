@@ -1,6 +1,6 @@
 <?php
 class PurchaseRequest {
-    public $prId;
+    public $purchaseRequestId;
     public $userId;
     public $date;
     public $campaign;
@@ -13,7 +13,7 @@ class PurchaseRequest {
     public $time;
 
     public function __construct($params) {
-        $this->prId = isset($params['prId']) ? $params['prId'] : '';
+        $this->purchaseRequestId = isset($params['purchaseRequestId']) ? $params['purchaseRequestId'] : '';
         $this->userId = isset($params['userId']) ? $params['userId'] : '';
         $this->date = isset($params['date']) ? $params['date'] : '';
         $this->campaign = isset($params['campaign']) ? $params['campaign'] : '';
@@ -28,25 +28,32 @@ class PurchaseRequest {
 
     public function check() {
         global $con;
-        $query = mysqli_query($con, "SELECT * FROM purchase_request WHERE id = '$this->prId' AND user_id = '$this->userId'");
+        $query = mysqli_query($con, "SELECT * FROM purchase_request WHERE id = '$this->purchaseRequestId' AND user_id = '$this->userId'");
         return $query->num_rows === 1 ? true : false;
     }
 
     public function getData() {
         global $con;
-        $query = mysqli_query($con, "SELECT * FROM purchase_request WHERE id = '$this->prId'");
+        $query = mysqli_query($con, "SELECT * FROM purchase_request WHERE id = '$this->purchaseRequestId'");
         return $query->fetch_array();
     }
 
     public function register() {
         global $con;
         $error = new ErrorHandler();
-
-        // Filtro de campos
-        if (empty($this->date) || empty($this->campaign)) return $error->throw('COMPLETE_THE_FORM');
-        if (empty($this->dateStart) || empty($this->dateEnd)) return $error->throw('COMPLETE_THE_FORM');
-        if (empty($this->distributor) || empty($this->entrepreneur)) return $error->throw('COMPLETE_THE_FORM');
-        if (empty($this->numRegistered) || empty($this->reseller)) return $error->throw('COMPLETE_THE_FORM');
+        
+        if (empty($this->date) || empty($this->campaign)) {
+            return $error->throw('COMPLETE_THE_FORM');
+        }
+        if (empty($this->dateStart) || empty($this->dateEnd)) {
+            return $error->throw('COMPLETE_THE_FORM');
+        }
+        if (empty($this->distributor) || empty($this->entrepreneur)) {
+            return $error->throw('COMPLETE_THE_FORM');
+        }
+        if (empty($this->numRegistered) || empty($this->reseller)) {
+            return $error->throw('COMPLETE_THE_FORM');
+        }
 
         try {
             $sql = new Sql();
@@ -67,12 +74,6 @@ class PurchaseRequest {
             $values = $data['values'];
             mysqli_query($con, "INSERT INTO purchase_request ($fields) VALUES ($values)");
         } catch (mysqli_sql_exception $err) {
-            $report = new Report([
-                "recipent" => "reports@logacode.net",
-                "title" => "User registration error",
-                "body" => $err->getMessage()
-            ]);
-            $report->sendReport();
             return $error->throw('AN_ERROR_HAS_OCCURRED');
         }
         return [
@@ -85,7 +86,7 @@ class PurchaseRequest {
         $error = new ErrorHandler();
         if (!$this->check()) return $error->throw('PR_DONT_EXISTS');
         try {
-            mysqli_query($con, "DELETE FROM purchase_request WHERE id = '$this->prId' AND user_id = '$this->userId'");
+            mysqli_query($con, "DELETE FROM purchase_request WHERE id = '$this->purchaseRequestId' AND user_id = '$this->userId'");
         } catch (mysqli_sql_exception $err) {
             $report = new Report([
                 "recipent" => "reports@logacode.net",
@@ -104,12 +105,18 @@ class PurchaseRequest {
         global $con;
         $error = new ErrorHandler();
 
-        // Filtro de campos
-        if (empty($this->date) || empty($this->campaign)) return $error->throw('COMPLETE_THE_FORM');
-        if (empty($this->dateStart) || empty($this->dateEnd)) return $error->throw('COMPLETE_THE_FORM');
-        if (empty($this->distributor) || empty($this->entrepreneur)) return $error->throw('COMPLETE_THE_FORM');
-        if (empty($this->numRegistered) || empty($this->reseller)) return $error->throw('COMPLETE_THE_FORM');
-
+        if (empty($this->date) || empty($this->campaign)) {
+            return $error->throw('COMPLETE_THE_FORM');
+        }
+        if (empty($this->dateStart) || empty($this->dateEnd)) {
+            return $error->throw('COMPLETE_THE_FORM');
+        }
+        if (empty($this->distributor) || empty($this->entrepreneur)) {
+            return $error->throw('COMPLETE_THE_FORM');
+        }
+        if (empty($this->numRegistered) || empty($this->reseller)) {
+            return $error->throw('COMPLETE_THE_FORM');
+        }
         try {
             $sql = new Sql();
             $query = [
@@ -125,14 +132,8 @@ class PurchaseRequest {
             ];
             $data = $sql->parseQueryUpdate($query);
             $query = $data['query'];
-            mysqli_query($con, "UPDATE purchase_request SET $query WHERE id = '$this->prId' AND user_id = '$this->userId'");
+            mysqli_query($con, "UPDATE purchase_request SET $query WHERE id = '$this->purchaseRequestId' AND user_id = '$this->userId'");
         } catch (mysqli_sql_exception $err) {
-            $report = new Report([
-                "recipent" => "reports@logacode.net",
-                "title" => "User registration error",
-                "body" => $err->getMessage()
-            ]);
-            $report->sendReport();
             return $error->throw('AN_ERROR_HAS_OCCURRED');
         }
         return [

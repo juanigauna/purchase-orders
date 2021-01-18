@@ -26,7 +26,7 @@ if ($f == 'new-request' && $loggedIn) {
 
 if ($f == 'edit-request' && $loggedIn) {
 	$pr = new PurchaseRequest([
-		"prId" => $_POST['pr_id'],
+		"purchaseRequestId" => $_POST['pr_id'],
 		"userId" => $userId,
 		"date" => $_POST['date'],
 		"campaign" => $_POST['campaign'],
@@ -93,9 +93,9 @@ if ($f == 'login') {
 	echo json_encode($user->login());
 }
 if ($f === 'delete-purchase-request' && $loggedIn) {
-	$prId = $_GET['pr_id'];
+	$purchaseRequestId = $_GET['pr_id'];
 	$pr = new PurchaseRequest([
-		"prId" => $prId,
+		"purchaseRequestId" => $purchaseRequestId,
 		"userId" => $userId
 	]);
 	$data = $pr->delete();

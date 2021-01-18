@@ -4,6 +4,7 @@ class User {
     private $email;
     private $password;
     private $time;
+    
     public function __construct($params) {
         $this->fullName = isset($params['full_name']) ? $params['full_name'] : '';
         $this->email = $params['email'] ? $params['email'] : '';
@@ -27,24 +28,18 @@ class User {
         $data = $this->getData();
         if (empty($this->email) || empty($this->password)) return $error->throw('COMPLETE_THE_FORM');
 
-        if ($this->checkUser() === true && $password->hash($this->password) === $data['password']) {
+        if ($this->checkUser() && $password->hash($this->password) === $data['password']) {
             $_SESSION['id'] = $data['id'];
             try {
                 mysqli_query($con, "UPDATE users SET last_seen = '$this->time'");
             } catch (mysqli_sql_exception $err) {
-                $report = new Report([
-                    "recipent" => "reports@logacode.net",
-                    "title" => "User login error",
-                    "body" => $err->getMessage()
-                ]);
-                $report->sendReport();
                 return $error->throw('AN_ERROR_HAS_OCCURRED');
             }
             return [
                 "status" => 200,
                 "message" => "¡Haz iniciado sesión!"
             ];
-        } else if ($this->checkUser() === false) {
+        } else if (!$this->checkUser()) {
             return $error->throw('USER_DONT_EXISTS');
         } else {
             return $error->throw('PASSWORD_INCORRECT');
@@ -53,8 +48,11 @@ class User {
     public function register() {
         global $con;
         $error = new ErrorHandler();
-        if (empty($this->fullName) || empty($this->email) || empty($this->password)) return $error->throw('COMPLETE_THE_FORM');
-        if ($this->checkUser() === false) {
+        if (empty($this->fullName) || empty($this->email) || empty($this->password)) {
+            return $error->throw('COMPLETE_THE_FORM');
+        }
+
+        if (!$this->checkUser()) {
             try {
                 $password = new Password();
                 $password = $password->hash($this->password);
@@ -73,12 +71,6 @@ class User {
                 $values = $data['values'];
                 mysqli_query($con, "INSERT INTO users ($fields) VALUES ($values)");
             } catch (mysqli_sql_exception $err) {
-                $report = new Report([
-                    "recipent" => "reports@logacode.net",
-                    "title" => "User registration error",
-                    "body" => $err->getMessage()
-                ]);
-                $report->sendReport();
                 return $error->throw('AN_ERROR_HAS_OCCURRED');
             }
             return [

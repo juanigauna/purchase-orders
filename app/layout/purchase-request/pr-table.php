@@ -14,14 +14,4 @@
 		include 'app/layout/products/content.php';
 	}
 	?>
-	<?php if (isset($ready)) { ?>
-		<tr style="background: #000; color: #fff">
-			<td></td>
-			<td style="text-align: right;">Total solicitado</td>
-			<td></td>
-			<td><?php echo total_products($pr_id) ?></td>
-			<td></td>
-			<td>$<?php echo total_import($pr_id) ?></td>
-		</tr>
-	<?php } ?>
 </table>

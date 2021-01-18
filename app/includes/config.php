@@ -6,13 +6,14 @@ iconv_set_encoding('output_encoding', 'UTF-8');
 
 define("MYSQL_CONN_ERROR", "Unable to connect to database.");
 mysqli_report(MYSQLI_REPORT_STRICT);
+
 $data = get_domain($_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
 
 $n['db_host'] = !$data['production'] ? 'localhost' : 'your db host';
 $n['db_user'] = !$data['production'] ? 'root' : 'your db user';
 $n['db_pass'] = !$data['production'] ? '' : 'your db password';
 $n['db_name'] = !$data['production'] ? 'orders' : 'your db name';
-$n['site_url'] = $data['protocol'].$data['domain'];
+$n['site_url'] = $data['protocol'].$data['domain']."/purchase-orders";
 
 try {
     $con = new mysqli($n['db_host'], $n['db_user'], $n['db_pass'], $n['db_name']);
