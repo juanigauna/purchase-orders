@@ -50,15 +50,15 @@ if (document.querySelector('#new-request')) {
 }
 if (document.querySelector('#quantity') && document.querySelector('#price')) {
 	document.querySelector('#quantity').addEventListener('keyup', e => {
-		var quantity = this.value
-		var price = document.querySelector('#price').value
-		var total = Number(quantity) * Number(price)
+		var quantity = e.target.value || 1
+		var price = document.querySelector('#price').value || 0
+		var total = parseFloat(quantity) * parseFloat(price)
 		document.querySelector('#import').value = total
 	})
 	document.querySelector('#price').addEventListener('keyup', e => {
-		var quantity = document.querySelector('#quantity').value
-		var price = this.value
-		var total = Number(quantity) * Number(price)
+		var quantity = document.querySelector('#quantity').value || 1
+		var price = e.target.value || 0
+		var total = parseFloat(quantity) * parseFloat(price)
 		document.querySelector('#import').value = total
 	})
 }

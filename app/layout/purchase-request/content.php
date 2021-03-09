@@ -5,8 +5,8 @@
 			<input class="m-r-2 w-full" type="text" name="page" placeholder="Pág">
 			<input class="m-r-2 w-full" type="text" name="description" placeholder="Descripción">
 			<input class="m-r-2 w-full" type="text" name="code" placeholder="Código">
-			<input id="quantity" class="m-r-2 w-full" type="text" name="quantity" placeholder="Cant.">
-			<input id="price" class="m-r-2 w-full" type="text" name="price" placeholder="Precio vent.">
+			<input id="quantity" class="m-r-2 w-full" type="number" step="any" name="quantity" placeholder="Cant.">
+			<input id="price" class="m-r-2 w-full" type="number" step="any" name="price" placeholder="Precio vent.">
 			<input id="import" class="w-full" type="text" name="import" placeholder="Importe">
 		</div>
 		<button id="loader" class="p-absolute p-l-3 p-r-3" style="right: -50px; top: 0;"><i id="icon_btn" class="fas fa-plus"></i></button>

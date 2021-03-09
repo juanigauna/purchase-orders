@@ -12,7 +12,7 @@ $data = get_domain($_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
 $n['db_host'] = !$data['production'] ? 'localhost' : 'your db host';
 $n['db_user'] = !$data['production'] ? 'root' : 'your db user';
 $n['db_pass'] = !$data['production'] ? '' : 'your db password';
-$n['db_name'] = !$data['production'] ? 'orders' : 'your db name';
+$n['db_name'] = !$data['production'] ? 'purchases' : 'your db name';
 $n['site_url'] = $data['protocol'].$data['domain']."/purchase-orders";
 
 try {
